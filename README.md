@@ -44,7 +44,8 @@ POST https://example.com/generate
 ```js
 Body:
 {
-  "src": "/path/to/source/file.min.css",
+  "src": "https://example.com/",
+  "link": "/path/to/source/file.min.css",
 }
 ```
 or
@@ -52,7 +53,8 @@ or
 ```js
 Body:
 {
-  "src": "/path/to/source/file.min.css/?isMobile",
+  "src": "https://example.com/?isMobile",
+  "link": "/path/to/source/file.min.css/?isMobile",
 }
 ```
 
