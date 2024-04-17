@@ -44,19 +44,20 @@ POST https://example.com/generate
 ```js
 Body:
 {
-  "src": "https://example.com/",
-  "link": "/path/to/source/file.min.css",
+  "src": "https://example.com/"
 }
 ```
+send a file with css
+
 or
 
 ```js
 Body:
 {
-  "src": "https://example.com/?isMobile",
-  "link": "/path/to/source/file.min.css/?isMobile",
+  "src": "https://example.com/?isMobile"
 }
 ```
+send a file with css
 
 if you want to get the source of the mobile version of your site. But your site need to understand this url params.
 
