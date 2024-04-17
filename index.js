@@ -4,6 +4,7 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 import tmp from 'tmp';
 import multer from 'multer';
+import { options } from './config.js';
 
 const app = express();
 app.use(express.json({limit: '10mb'}));
@@ -11,35 +12,6 @@ app.use(express.json({limit: '10mb'}));
 // Configure multer storage options to use memory storage
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
-const includedClasses = {
-  desktop: [
-    /^.*\.col-xs-3.*/, /^.*\.col-sm-2.*/, /^.*\.hide.*/,
-    /^.*\.selectize.*/, /^.*\.dd_select.*/, /^.*\.pull-left.*/, /^.*\.category_heading.*/, /^.*\.listing-header.*/,
-    /^.*\.tab-item.*/, /^.*\.tablinks.*/, /^.*\.nav.*/,
-    '.quantity-selector-mask input', '.buy', '.description_card_product .prod_buy_btns .btn-success', '#sync1 .item',
-    /^.*\.prod_buy_btns.*/, /^.*\.prod_attributes_div.*/, /^.*\.thumb.*/, '#sync1 img',
-    /^.*\.product_label.*/, /^.*\.product_labels.*/, /^.*\.compare_button.*/, /^.*\.wishlisht_button.*/, /^.*\.product_right_content.*/,
-    /^.*\.product-buy-price.*/, /^.*\.compare_wishlist.*/, /^.*\.refresh_icon.*/,
-    /^.*\.breadcrumb.*/, /^.*\.add_nav.*/, /^.*\.box-category.*/, /^.*\.owl-.*/, /^.*\.color_attributes-item.*/, /^.*\.img-circle.*/,
-    /^.*\.selectize-control.*/, /^.*\.prod_options tr td.*/, /^.*\.selectize-input.*/, /^.*\.prod_attributes_div>div.*/,
-    /^.*\.description_card_product table.*/, /^.*\.pointer_events_none.*/, /^.*\.search_categories.*/, /^.*\.search_cat_active.*/
-  ],
-  mobile: [
-    '.mobile_header', '.d-none', '.sr-only', '.open-mobile-search', /^.*\.show_search_form.*/, /^.*\.icon-bar.*/,
-    /^.*\.mobile_menu.*/, /^.*\.mobile_header.*/, /^.*\.search-block.*/, /^.*\.header-actions.*/,
-    /^.*\.col-xs-3.*/, /^.*\.col-sm-2.*/, /^.*\.hide.*/,
-    /^.*\.selectize.*/, /^.*\.dd_select.*/, /^.*\.pull-left.*/, /^.*\.category_heading.*/, /^.*\.listing-header.*/,
-    /^.*\.tab-item.*/, /^.*\.tablinks.*/, /^.*\.nav.*/,
-    '.quantity-selector-mask input', '.buy', '.description_card_product .prod_buy_btns .btn-success', '#sync1 .item',
-    /^.*\.prod_buy_btns.*/, /^.*\.prod_attributes_div.*/, /^.*\.thumb.*/, '#sync1 img',
-    /^.*\.product_label.*/, /^.*\.product_labels.*/, /^.*\.compare_button.*/, /^.*\.wishlisht_button.*/, /^.*\.product_right_content.*/,
-    /^.*\.product-buy-price.*/, /^.*\.compare_wishlist.*/, /^.*\.refresh_icon.*/,
-    /^.*\.breadcrumb.*/, /^.*\.color_attributes-item.*/, /^.*\.img-circle.*/, /^.*\.selectize-control.*/, /^.*\.prod_options tr td.*/,
-    /^.*\.selectize-input.*/, /^.*\.prod_attributes_div>div.*/, /^.*\.description_card_product table.*/, /^.*\.pointer_events_none.*/,
-    /^.*\.search_categories.*/, /^.*\.search_cat_active.*/, /^.*\.item.single_image.*/
-  ]
-};
 
 app.get('/', (req, res) => {
   res.send('This is a server that generates critical CSS');
@@ -73,17 +45,17 @@ app.post('/', upload.single('css'), async (req, res) => {
     const { css, html, uncritical } = await generate({
       concurrency: 1,
       inline: false,
-      base: 'styles/',
+      base: './styles/',
       src: hostname,
       css: cssFile,
       target: 'critical.min.css',
-      width: (isMobile) ? 450 : 1920,
-      height: (isMobile) ? 2000 : 5000,
+      width: (isMobile) ? options.mobile.width : options.desktop.width,
+      height: (isMobile) ? options.mobile.height : options.desktop.height,
       penthouse: {
         puppeteer: {
           getBrowser: () => browser,
         },
-        forceInclude: (isMobile) ? includedClasses.mobile : includedClasses.desktop,
+        forceInclude: (isMobile) ? options.mobile.includedClasses : options.desktop.includedClasses,
       }
     });
     await fs.promises.unlink(cssFile);
