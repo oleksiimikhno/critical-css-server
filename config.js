@@ -1,7 +1,7 @@
 export const options = {
   desktop: {
     width: 1920,
-    heught: 5000,
+    height: 5000,
     includedClasses: [
       /^.*\.col-xs-3.*/, /^.*\.col-sm-2.*/, /^.*\.hide.*/,
       /^.*\.selectize.*/, /^.*\.dd_select.*/, /^.*\.pull-left.*/, /^.*\.category_heading.*/, /^.*\.listing-header.*/,
@@ -17,7 +17,7 @@ export const options = {
   },
   mobile: {
     width: 450,
-    heught: 2000,
+    height: 2000,
     includedClasses: [
       '.mobile_header', '.d-none', '.sr-only', '.open-mobile-search', /^.*\.show_search_form.*/, /^.*\.icon-bar.*/,
       /^.*\.mobile_menu.*/, /^.*\.mobile_header.*/, /^.*\.search-block.*/, /^.*\.header-actions.*/,
