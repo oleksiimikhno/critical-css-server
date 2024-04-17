@@ -43,12 +43,11 @@ app.post('/', upload.single('css'), async (req, res) => {
     const isMobile = hostname.includes('isMobile');
 
     const { css, html, uncritical } = await generate({
-      concurrency: 1,
-      inline: false,
-      base: './styles/',
+      base: '/',
+      inline: true,
       src: hostname,
       css: cssFile,
-      target: 'critical.min.css',
+      // target: 'critical.min.css',
       width: (isMobile) ? options.mobile.width : options.desktop.width,
       height: (isMobile) ? options.mobile.height : options.desktop.height,
       penthouse: {
